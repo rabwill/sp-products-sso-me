@@ -2,9 +2,7 @@ import {
   TeamsActivityHandler,
   CardFactory,
   TurnContext,
-  MessagingExtensionQuery,
-  MessagingExtensionResponse,
-  InvokeResponse,
+  MessagingExtensionQuery
 } from "botbuilder";
 import * as ACData from "adaptivecards-templating";
 import helloWorldCard from "./adaptiveCards/helloWorldCard.json";
@@ -28,18 +26,14 @@ export class SearchApp extends TeamsActivityHandler {
       // There is no token, so the user has not signed in yet.
       return credentials.getSignInComposeExtension();
   }    
-  const graphService = new GraphService(); 
-//  const graphClient = graphService.getGraphClient(token);
-// const me = await graphService.getMyProfile(graphClient);
-
+  const graphService = new GraphService(token); 
   const hostName = config.sharepointHost;
   const siteUrl = config.sharepointSite;
   const listName = config.sharepointList;
-  const siteId = await graphService.getSiteId(token, hostName, siteUrl)
-  let site = await graphService.getProductSite(token, siteId);
-  
-  const products = await graphService.getProducts(token, site, listName, searchQuery);
-  const categories= await graphService.getretailCategories(token,site,listName);
+  const siteId = await graphService.getSiteId(hostName, siteUrl)
+  let productSite = await graphService.getProductSite(siteId);  
+  const products = await graphService.getProducts(productSite, listName, searchQuery);
+  const categories= await graphService.getretailCategories(productSite,listName);
   const attachments = [];
   products.value.forEach((obj) => {
     const template = new ACData.Template(helloWorldCard);

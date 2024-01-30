@@ -1,7 +1,7 @@
-import { AdaptiveCardInvokeResponse, CloudAdapter, MessagingExtensionQuery, MessagingExtensionResponse, TurnContext } from 'botbuilder';
+import {  CloudAdapter, MessagingExtensionQuery, MessagingExtensionResponse, TurnContext } from 'botbuilder';
 import { UserTokenClient } from 'botframework-connector';
 import { Activity } from 'botframework-schema';
-import config from '../config';
+
 
 export class AuthService {
     private client: UserTokenClient;

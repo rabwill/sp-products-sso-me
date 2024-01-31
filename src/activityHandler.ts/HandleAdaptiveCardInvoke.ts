@@ -30,20 +30,33 @@ export const HandleAdaptiveCardInvoke = async (context: TurnContext, invokeValue
                 const updatedProduct = {Id:data.productId,Title:data.Title,RetailCategory:data.RetailCategory,ReleaseDate:data.ReleaseDate};
                 const product = await graphService.updateProduct(updatedProduct);
                 const successTemplate = new AdaptiveCards.Template(success);
-                var successCard = successTemplate.expand({
+                var cardS = successTemplate.expand({
                     $root: {
                         Product: product,
-                        message:"Product updated successfully",
-                        RetailCategories: categories
+                        message:"Product updated successfully",                       
                     }
                 });                             
-                return CreateAdaptiveCardInvokeResponse(200,successCard);                    
+                return CreateAdaptiveCardInvokeResponse(200,cardS);                    
             case 'cancel':
-                break;
+                return await refreshCard(data.productId);   
+            case 'refresh':
+                    return await refreshCard(data.productId);           ;
             default:
                 return CreateActionErrorResponse(400, 0, `ActionVerbNotSupported: ${verb} is not a supported action verb.`);
         }
     } catch (error) {       
         return CreateActionErrorResponse(500, 0, error.message);
+    }
+
+    async function refreshCard(id) {
+        const response = await graphService.getProduct(id);
+        const viewTemplate = new AdaptiveCards.Template(viewProduct);
+        var cardP = viewTemplate.expand({
+            $root: {
+                Product: response,
+                RetailCategories: categories
+            }
+        });
+        return CreateAdaptiveCardInvokeResponse(200, cardP);
     }
 };

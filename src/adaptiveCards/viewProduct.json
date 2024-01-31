@@ -16,7 +16,7 @@
     "body": [
         {
             "type": "TextBlock",
-            "text": "${Product.Title} This",
+            "text": "${Product.Title}",
             "wrap": true,
             "style": "heading"
         },

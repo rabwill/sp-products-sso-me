@@ -1,0 +1,54 @@
+{
+    "type": "AdaptiveCard",
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "version": "1.5",   
+    "body": [
+        {
+            "type": "Container",
+            "style": "good",
+            "separator": true,
+            "items": [
+              {
+                "type": "TextBlock",
+                "text": "${message}",
+                "weight": "Bolder",
+                "size": "Medium",
+                "color": "Good"
+              }]
+          },
+          {
+            "type": "Container",
+            "separator": true,
+            "items": [
+        {
+            "type": "TextBlock",
+            "text": "${Product.Title}",
+            "wrap": true,
+            "style": "heading"
+        },
+        {
+            "type": "TextBlock",
+            "text": "${Product.RetailCategory}",
+            "wrap": true
+        },
+        {
+            "type": "Image",
+            "url": "${Product.PhotoSubmission}",
+            "altText": "${Title}"
+        },
+        {
+            "type": "FactSet",
+            "facts": [
+                {
+                    "title": "Call Volume",
+                    "value": "${formatNumber(Product.CustomerRating,0)}"
+                },
+                {
+                    "title": "Release Date",
+                    "value": "${formatDateTime(Product.ReleaseDate,'dd/MM/yyyy')}"
+                }
+            ]
+        }]
+          }]
+          
+}

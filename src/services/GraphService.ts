@@ -53,6 +53,33 @@ export class GraphService {
     return column.choice.choices;
   }
 
+  //update product details in the SharePoint list using productId and siteId with product infor
+  async updateProduct(product): Promise<ProductItem>{
+    const siteId = await this.getSharePointStieId();
+    const item = {
+      fields: {
+        Title: product.Title,
+        RetailCategory: product.RetailCategory,       
+        ReleaseDate: product.ReleaseDate
+      }
+    };
+    await this.graphClient.api(`/sites/${siteId}/lists/Products/items/${product.Id}`).update(item);
+    return this.getProduct(product.Id);
+  }
+  //get product details from the SharePoint list using productId and siteId
+  async getProduct(productId): Promise<ProductItem> {
+    const siteId = await this.getSharePointStieId();
+    const product = await this.graphClient.api(`/sites/${siteId}/lists/Products/items/${productId}`).get();
+    return {
+      Id: product.id,
+      Title: product.fields.Title,
+      RetailCategory: product.fields.RetailCategory,
+      PhotoSubmission: product.fields.PhotoSubmission,
+      CustomerRating: product.fields.CustomerRating,
+      ReleaseDate: product.fields.ReleaseDate
+    };
+  }
+
 
 
 

@@ -14,13 +14,14 @@ export const HandleMessagingExtensionQuery = async (context: TurnContext, query:
   }    
   const graphService = new GraphService(token);  
   const products = await graphService.getProducts(searchQuery);
-  //const categories= await graphService.getretailCategories();
+  const categories= await graphService.getretailCategories();
   const attachments = [];
   products.forEach((obj) => {
     const template = new AdaptiveCards.Template(viewProduct);
     const card = template.expand({
       $root: {
-        Product: obj
+        Product: obj,
+        RetailCategories: categories
       },
     });
     const preview = CardFactory.heroCard(obj.Title);

@@ -63,8 +63,15 @@ export class GraphService {
         ReleaseDate: product.ReleaseDate
       }
     };
-    await this.graphClient.api(`/sites/${siteId}/lists/Products/items/${product.Id}`).update(item);
-    return this.getProduct(product.Id);
+    const updatedData= await this.graphClient.api(`/sites/${siteId}/lists/Products/items/${product.Id}`).update(item);
+    return {
+      Id: updatedData.id,
+      Title: updatedData.fields.Title,
+      RetailCategory: updatedData.fields.RetailCategory,
+      PhotoSubmission: updatedData.fields.PhotoSubmission,
+      CustomerRating: updatedData.fields.CustomerRating,
+      ReleaseDate: updatedData.fields.ReleaseDate
+    };
   }
   //get product details from the SharePoint list using productId and siteId
   async getProduct(productId): Promise<ProductItem> {

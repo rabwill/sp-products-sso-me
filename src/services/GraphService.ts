@@ -1,4 +1,14 @@
 import { Client } from "@microsoft/microsoft-graph-client";
+import { ProductItem } from "../types/ProductItems";
+import config from "../config";
+const listFields = [
+  "fields/id",
+  "fields/Title",
+  "fields/RetailCategory",
+  "fields/PhotoSubmission",
+  "fields/CustomerRating",
+  "fields/ReleaseDate"
+];
 
 export class GraphService {
   private _token: any;
@@ -25,13 +35,26 @@ export class GraphService {
     return site.value;
   }
 
-  async getProducts(site, listName, searchText) {
-    let products = await this.graphClient.api(`/sites/${site[0].id}/lists/${listName}/items?expand=fields&$filter=startswith(fields/Title,'${searchText}')`).get();
-    return products;
+  async getProducts(searchText): Promise<ProductItem[]>{
+    const { sharepointIds } = await this.graphClient.api(`/sites/${config.sharepointHost}:/${config.sharepointSite}`).select("sharepointIds").get();
+    let products = await this.graphClient.api(`/sites/${sharepointIds.siteId}/lists/Products/items?expand=fields&select=${listFields.join(",")}&$filter=startswith(fields/Title,'${searchText}')`).get();
+    const productItems: ProductItem[]= products.value.map((item) => {
+      return {
+        id: item.id,
+        Title: item.fields.Title,
+        RetailCategory: item.fields.RetailCategory,
+        PhotoSubmission: item.fields.PhotoSubmission,
+        CustomerRating: item.fields.CustomerRating,
+        ReleaseDate: item.fields.ReleaseDate
+      };
+    }
+    );
+    return productItems;
   }
 
-  async getretailCategories(site, listName) {
-    let column = await this.graphClient.api(`/sites/${site[0].id}/lists/${listName}/columns/RetailCategory`).get();
+  async getretailCategories() {
+    const { sharepointIds } = await this.graphClient.api(`/sites/${config.sharepointHost}:/${config.sharepointSite}`).select("sharepointIds").get();
+    let column = await this.graphClient.api(`/sites/${sharepointIds.siteId}/lists/Products/columns/RetailCategory`).get();
     return column.choice.choices;
   }
 

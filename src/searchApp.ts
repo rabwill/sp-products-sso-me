@@ -18,7 +18,9 @@ export class SearchApp extends TeamsActivityHandler {
 
   // Search.
   public async handleTeamsMessagingExtensionQuery(context: TurnContext, query: MessagingExtensionQuery): Promise<any> {
-   
+    const hostName = config.sharepointHost;
+    const siteUrl = config.sharepointSite;
+    const listName = config.sharepointList;
     const searchQuery = query.parameters[0].value;
     const credentials = new AuthService(context);
     const token = await credentials.getUserToken(query);
@@ -26,25 +28,20 @@ export class SearchApp extends TeamsActivityHandler {
       // There is no token, so the user has not signed in yet.
       return credentials.getSignInComposeExtension();
   }    
-  const graphService = new GraphService(token); 
-  const hostName = config.sharepointHost;
-  const siteUrl = config.sharepointSite;
-  const listName = config.sharepointList;
-  const siteId = await graphService.getSiteId(hostName, siteUrl)
-  let productSite = await graphService.getProductSite(siteId);  
-  const products = await graphService.getProducts(productSite, listName, searchQuery);
-  const categories= await graphService.getretailCategories(productSite,listName);
+  const graphService = new GraphService(token);  
+  const products = await graphService.getProducts(searchQuery);
+  const categories= await graphService.getretailCategories();
   const attachments = [];
-  products.value.forEach((obj) => {
+  products.forEach((obj) => {
     const template = new ACData.Template(helloWorldCard);
     const card = template.expand({
       $root: {
-        title: obj.fields.Title,
-        category: obj.fields.RetailCategory,
+        title: obj.Title,
+        category: obj.RetailCategory,
         categories:categories
       },
     });
-    const preview = CardFactory.heroCard(obj.fields.Title);
+    const preview = CardFactory.heroCard(obj.Title);
     const attachment = { ...CardFactory.adaptiveCard(card), preview };
     attachments.push(attachment);
   });

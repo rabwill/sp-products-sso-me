@@ -1,9 +1,9 @@
 export type ProductItem = {
-    id: number;
+    Id: number;
     Title: string;
     RetailCategory: string,
     PhotoSubmission:string,
-    CustomerRating:string,
+    CustomerRating:number,
     ReleaseDate:string
 
 };

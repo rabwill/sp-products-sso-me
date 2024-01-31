@@ -2,7 +2,7 @@ import { Client } from "@microsoft/microsoft-graph-client";
 import { ProductItem } from "../types/ProductItems";
 import config from "../config";
 const listFields = [
-  "fields/id",
+  "id",
   "fields/Title",
   "fields/RetailCategory",
   "fields/PhotoSubmission",
@@ -25,22 +25,17 @@ export class GraphService {
       }
     });
   }
-
-  async getSiteId(hostName, siteUrl) {
-    let siteId = await this.graphClient.api(`/sites/${hostName}:/${siteUrl}`).get();
-    return siteId.id;
-  }
-  async getProductSite(siteId) {
-    let site = await this.graphClient.api(`/sites/${siteId}/sites?search=Product`).get();
-    return site.value;
+  async getSharePointStieId(): Promise<string> {
+    const { sharepointIds } = await this.graphClient.api(`/sites/${config.sharepointHost}:/${config.sharepointSite}`).select("sharepointIds").get();
+    return sharepointIds.siteId;
   }
 
   async getProducts(searchText): Promise<ProductItem[]>{
-    const { sharepointIds } = await this.graphClient.api(`/sites/${config.sharepointHost}:/${config.sharepointSite}`).select("sharepointIds").get();
-    let products = await this.graphClient.api(`/sites/${sharepointIds.siteId}/lists/Products/items?expand=fields&select=${listFields.join(",")}&$filter=startswith(fields/Title,'${searchText}')`).get();
+    const siteId = await this.getSharePointStieId();
+    let products = await this.graphClient.api(`/sites/${siteId}/lists/Products/items?expand=fields&select=${listFields.join(",")}&$filter=startswith(fields/Title,'${searchText}')`).get();
     const productItems: ProductItem[]= products.value.map((item) => {
       return {
-        id: item.id,
+        Id: item.id,
         Title: item.fields.Title,
         RetailCategory: item.fields.RetailCategory,
         PhotoSubmission: item.fields.PhotoSubmission,
@@ -53,8 +48,8 @@ export class GraphService {
   }
 
   async getretailCategories() {
-    const { sharepointIds } = await this.graphClient.api(`/sites/${config.sharepointHost}:/${config.sharepointSite}`).select("sharepointIds").get();
-    let column = await this.graphClient.api(`/sites/${sharepointIds.siteId}/lists/Products/columns/RetailCategory`).get();
+    const siteId = await this.getSharePointStieId();
+    let column = await this.graphClient.api(`/sites/${siteId}/lists/Products/columns/RetailCategory`).get();
     return column.choice.choices;
   }
 

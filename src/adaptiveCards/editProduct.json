@@ -1,0 +1,70 @@
+{
+  "type": "AdaptiveCard",
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "version": "1.5",
+  "refresh": {
+    "userIds": [],
+    "action": {
+        "type": "Action.Execute",
+        "verb": "refresh",
+        "title": "Refresh",
+        "data": {
+          "Product": "${Product}"
+        }
+    }
+},
+  "body": [
+    {
+      "type": "Input.Text",
+      "label": "Title",
+      "id": "Title",
+      "value": "${Product.Title}",
+      "isRequired": true,
+      "errorMessage": "Title is required"
+    },
+    {
+      "type": "Input.ChoiceSet",
+      "label": "Category",
+      "id": "RetailCategory",
+      "value": "${Product.RetailCategory}",
+      "isRequired": true,
+      "errorMessage": "Category is required",
+      "choices": [
+        {
+          "$data": "${RetailCategories}",
+          "title": "${$data}",
+          "value": "${$data}"
+        }
+      ]
+    },
+    {
+      "type": "Input.Date",
+      "label": "Release date",
+      "id": "ReleaseDate",
+      "value": "${formatDateTime(Product.ReleaseDate,'yyyy-MM-dd')}",
+      "isRequired": true,
+      "errorMessage": "Release date is required"
+    },
+    {
+      "type": "ActionSet",
+      "actions": [
+        {
+          "type": "Action.Submit",
+          "verb": "save",
+          "title": "Save",
+          "data": {
+            "Product": "${Product}"
+          }
+        },
+        {
+          "type": "Action.Submit",
+          "verb": "cancel",
+          "title": "Cancel",
+          "data": {           
+            
+          }
+        }
+      ]
+    }
+  ]
+}

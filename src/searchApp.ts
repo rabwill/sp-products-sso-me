@@ -1,57 +1,44 @@
-import {
-  TeamsActivityHandler,
-  CardFactory,
-  TurnContext,
-  MessagingExtensionQuery
-} from "botbuilder";
-import * as ACData from "adaptivecards-templating";
-import helloWorldCard from "./adaptiveCards/helloWorldCard.json";
-import { AuthService } from "./services/AuthService";
-import { GraphService } from "./services/GraphService";
-import config from "./config";
-
-
+import {TeamsActivityHandler,TurnContext, MessagingExtensionQuery, AdaptiveCardInvokeValue, AdaptiveCardInvokeResponse, CardFactory, MessageFactory, InvokeResponse} from "botbuilder";
+import { HandleMessagingExtensionQuery } from "./activityHandler.ts/HandleMessagingExtensionQuery";
+import { HandleTeamsTaskModuleFetch } from "./activityHandler.ts/HandleTeamsTaskModuleFetch";
+import * as AdaptiveCards from "adaptivecards-templating";
 export class SearchApp extends TeamsActivityHandler {
   constructor() {
     super();
+    this.onMessage(async (context, next) => {
+      await next();
+    });
   }
+  public override async handleTeamsMessagingExtensionQuery(context: TurnContext, query: MessagingExtensionQuery): Promise<any> {
+    return await HandleMessagingExtensionQuery(context, query);
+  }
+  public override async handleTeamsTaskModuleFetch(context, invokeValue): Promise<any> {
+    return await HandleTeamsTaskModuleFetch(context, invokeValue);
+  }
+  public override async handleTeamsTaskModuleSubmit(context, taskModuleRequest):Promise<any> {
+    const obj = taskModuleRequest.data;      
+    const userName = context.activity.from.name;  
+    const mention = {
+      type: "mention",
+      mentioned: context.activity.from,
+      text: `<at>${userName}</at>`,
+    };
+    const topLevelMessage = MessageFactory.text(`Thank you for updating the work item  ${mention.text}`);
+    topLevelMessage.entities = [mention];    
 
-  // Search.
-  public async handleTeamsMessagingExtensionQuery(context: TurnContext, query: MessagingExtensionQuery): Promise<any> {
-    const hostName = config.sharepointHost;
-    const siteUrl = config.sharepointSite;
-    const listName = config.sharepointList;
-    const searchQuery = query.parameters[0].value;
-    const credentials = new AuthService(context);
-    const token = await credentials.getUserToken(query);
-    if (!token) {
-      // There is no token, so the user has not signed in yet.
-      return credentials.getSignInComposeExtension();
-  }    
-  const graphService = new GraphService(token);  
-  const products = await graphService.getProducts(searchQuery);
-  const categories= await graphService.getretailCategories();
-  const attachments = [];
-  products.forEach((obj) => {
-    const template = new ACData.Template(helloWorldCard);
+
+    const templateJson = require('./adaptiveCards/viewProduct.json')
+    const template = new AdaptiveCards.Template(templateJson);
     const card = template.expand({
       $root: {
-        title: obj.Title,
-        category: obj.RetailCategory,
-        categories:categories
-      },
+        Product: obj.Product
+      }
     });
-    const preview = CardFactory.heroCard(obj.Title);
-    const attachment = { ...CardFactory.adaptiveCard(card), preview };
-    attachments.push(attachment);
-  });
-
-  return {
-    composeExtension: {
-      type: "result",
-      attachmentLayout: "list",
-      attachments: attachments,
-    },
-  };
-}
+    const resultCard = CardFactory.adaptiveCard(card);
+    await context.sendActivity(topLevelMessage);
+    await context.sendActivity({
+      type: 'message',
+      attachments: [resultCard],
+    });
+  }
 }

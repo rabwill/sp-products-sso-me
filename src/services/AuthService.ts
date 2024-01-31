@@ -1,4 +1,4 @@
-import {  CloudAdapter, MessagingExtensionQuery, MessagingExtensionResponse, TurnContext } from 'botbuilder';
+import {  AdaptiveCardInvokeResponse, CloudAdapter, MessagingExtensionQuery, MessagingExtensionResponse, TurnContext } from 'botbuilder';
 import { UserTokenClient } from 'botframework-connector';
 import { Activity } from 'botframework-schema';
 
@@ -33,6 +33,16 @@ export class AuthService {
                         },
                     ],
                 },
+            },
+        };
+    }
+    async getSignInAdaptiveCardInvokeResponse(): Promise<AdaptiveCardInvokeResponse> {
+       const signInLink = await this.getSignInLink(); 
+        return {
+            statusCode: 401,
+            type: 'application/vnd.microsoft.card.signin',
+            value: {
+                signinurl: signInLink
             },
         };
     }

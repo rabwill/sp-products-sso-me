@@ -3,17 +3,14 @@
     "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
     "version": "1.6",
     "refresh": {
-        "userIds": [],
+        "userIds": ["${UserId}"],
         "action": {
             "type": "Action.Execute",
             "verb": "refresh",
             "title": "Refresh",
             "data": {
                 "productId": "${Product.Id}"
-            },
-            "userIds": [
-                "${UserId}"
-            ]
+            }           
         }
     },
     "body": [

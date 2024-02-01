@@ -21,7 +21,9 @@ export const HandleMessagingExtensionQuery = async (context: TurnContext, query:
     const card = template.expand({
       $root: {
         Product: obj,
-        RetailCategories: categories
+        RetailCategories: categories,
+        UserId:context.activity.from.id
+
       },
     });
     const preview = CardFactory.heroCard(obj.Title);

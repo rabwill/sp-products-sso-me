@@ -33,10 +33,11 @@ export const HandleAdaptiveCardInvoke = async (context: TurnContext, invokeValue
                 var cardS = successTemplate.expand({
                     $root: {
                         Product: product,
-                        message:"Product updated successfully",                       
+                        message:"Product updated successfully",  
+                        UserId:context.activity.from.id                     
                     }
                 });                             
-                return CreateAdaptiveCardInvokeResponse(200,cardS);                    
+               return CreateAdaptiveCardInvokeResponse(200,cardS);                    
             case 'cancel':
                 return await refreshCard(data.productId);   
             case 'refresh':
@@ -47,7 +48,7 @@ export const HandleAdaptiveCardInvoke = async (context: TurnContext, invokeValue
     } catch (error) {       
         return CreateActionErrorResponse(500, 0, error.message);
     }
-
+//refresh to initial card
     async function refreshCard(id) {
         const response = await graphService.getProduct(id);
         const viewTemplate = new AdaptiveCards.Template(viewProduct);

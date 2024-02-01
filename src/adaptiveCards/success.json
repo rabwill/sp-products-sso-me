@@ -1,7 +1,7 @@
 {
     "type": "AdaptiveCard",
     "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
-    "version": "1.6",   
+    "version": "1.6",
     "refresh": {
         "userIds": [],
         "action": {
@@ -10,7 +10,10 @@
             "title": "Refresh",
             "data": {
                 "productId": "${Product.Id}"
-            }
+            },
+            "userIds": [
+                "${UserId}"
+            ]
         }
     },
     "body": [
@@ -19,47 +22,31 @@
             "style": "good",
             "separator": true,
             "items": [
-              {
-                "type": "TextBlock",
-                "text": "${message}",
-                "weight": "Bolder",
-                "size": "Medium",
-                "color": "Good"
-              }]
-          },
-          {
+                {
+                    "type": "TextBlock",
+                    "text": "${message}",
+                    "weight": "Bolder",
+                    "size": "Medium",
+                    "color": "Good"
+                }
+            ]
+        },
+        {
             "type": "Container",
             "separator": true,
             "items": [
-        {
-            "type": "TextBlock",
-            "text": "${Product.Title}",
-            "wrap": true,
-            "style": "heading"
-        },
-        {
-            "type": "TextBlock",
-            "text": "${Product.RetailCategory}",
-            "wrap": true
-        },
-        {
-            "type": "Image",
-            "url": "${Product.PhotoSubmission}",
-            "altText": "${Title}"
-        },
-        {
-            "type": "FactSet",
-            "facts": [
                 {
-                    "title": "Call Volume",
-                    "value": "${formatNumber(Product.CustomerRating,0)}"
+                    "type": "TextBlock",
+                    "text": "${Product.Title}",
+                    "wrap": true,
+                    "style": "heading"
                 },
                 {
-                    "title": "Release Date",
-                    "value": "${formatDateTime(Product.ReleaseDate,'dd/MM/yyyy')}"
+                    "type": "TextBlock",
+                    "text": "${Product.RetailCategory}",
+                    "wrap": true
                 }
             ]
-        }]
-          }]
-          
+        }
+    ]
 }

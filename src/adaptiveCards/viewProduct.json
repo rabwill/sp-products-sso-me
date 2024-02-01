@@ -10,7 +10,8 @@
             "title": "Refresh",
             "data": {
                 "productId": "${Product.Id}"
-            }
+            },
+            "userIds": ["${UserId}"]
         }
     },
     "body": [
@@ -24,12 +25,7 @@
             "type": "TextBlock",
             "text": "${Product.RetailCategory}",
             "wrap": true
-        },
-        {
-            "type": "Image",
-            "url": "${Product.PhotoSubmission}",
-            "altText": "${Title}"
-        },
+        },      
         {
             "type": "FactSet",
             "facts": [

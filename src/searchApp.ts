@@ -12,6 +12,5 @@ export class SearchApp extends TeamsActivityHandler {
   public async onAdaptiveCardInvoke(context: TurnContext, invokeValue: AdaptiveCardInvokeValue): Promise<AdaptiveCardInvokeResponse> {
     return HandleAdaptiveCardInvoke(context, invokeValue);
 }
-
  
 }

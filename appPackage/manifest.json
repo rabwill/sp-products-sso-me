@@ -1,7 +1,7 @@
 {
     "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.16/MicrosoftTeams.schema.json",
     "manifestVersion": "1.16",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "id": "${{TEAMS_APP_ID}}",
     "packageName": "com.microsoft.teams.extension",
     "developer": {
@@ -15,13 +15,13 @@
         "outline": "outline.png"
     },
     "name": {
-        "short": "sp-me-sso${{APP_NAME_SUFFIX}}",
-        "full": "full name for sp-me-sso"
+        "short": "spprod${{APP_NAME_SUFFIX}}",
+        "full": "spprod"
     },
     "description": {
-        "short": "Find npm package by name.",
-        "full": "Find npm package according to the npm package name."
-    },
+        "short": "Product look up tool.",
+        "full": "Get real-time product information and share them in a conversation. Search by product name or target audience. spprod works with Microsoft 365 Chat. Find products at Contoso. Find Contoso products called mark8. Find Contoso products named mark8. Find Contoso products related to Mark8. Find Contoso products aimed at individuals. Find Contoso products aimed at businesses. Find Contoso products aimed at individuals with the name mark8. Find Contoso products aimed at businesses with the name mark8."
+      },
     "accentColor": "#FFFFFF",
     "bots": [
         {
@@ -35,20 +35,20 @@
             "botId": "${{BOT_ID}}",
             "commands": [
                 {
-                    "id": "findNpmPackage",
+                    "id": "Search",
                     "context": [
                         "compose",
                         "commandBox",
                         "message"
                     ],
-                    "description": "Find npm package according to the npm package name",
-                    "title": "Find Npm Package",
+                    "description": "Find products by name",
+                    "title": "Products",
                     "type": "query",
                     "parameters": [
                         {
-                            "name": "NpmPackageName",
-                            "title": "Npm Package Name",
-                            "description": "The name of the npm package to be searched",
+                            "name": "ProductName",
+                            "title": "Product name",
+                            "description": "The name of the product as a keyword",
                             "inputType": "text"
                         }
                     ]

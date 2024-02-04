@@ -41,16 +41,22 @@
                         "commandBox",
                         "message"
                     ],
-                    "description": "Find products by name",
+                    "description": "Find products by name or by target audience",
                     "title": "Products",
                     "type": "query",
                     "parameters": [
                         {
-                            "name": "ProductName",
+                            "name": "productName",
                             "title": "Product name",
                             "description": "The name of the product as a keyword",
                             "inputType": "text"
-                        }
+                        },
+                        {
+                            "name": "targetAudience",
+                            "title": "Target audience",
+                            "description": "Audience that the product is aimed at. Consumer products are sold to individuals. Enterprise products are sold to businesses",
+                            "inputType": "text"
+                          }
                     ]
                 }
             ]

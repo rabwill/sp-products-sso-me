@@ -36,3 +36,14 @@ export const setTaskInfo = (taskInfo) => {
     taskInfo.width = 800;
     taskInfo.title = "";
   }
+  export const cleanupParam=(value: string): string =>{
+
+    if (!value) {
+        return "";
+    } else {
+        let result = value.trim();
+        result = result.split(',')[0];          
+        result = result.replace("*", "");      
+        return result;
+    }
+}

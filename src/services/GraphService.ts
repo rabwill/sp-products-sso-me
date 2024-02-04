@@ -30,9 +30,19 @@ export class GraphService {
     return sharepointIds.siteId;
   }
 
-  async getProducts(searchText): Promise<ProductItem[]>{
+  async getProducts(productName,retailCategory): Promise<ProductItem[]>{
     const siteId = await this.getSharePointStieId();
-    let products = await this.graphClient.api(`/sites/${siteId}/lists/Products/items?expand=fields&select=${listFields.join(",")}&$filter=startswith(fields/Title,'${searchText}')`).get();
+    let filterText=`&$filter=startswith(fields/Title,'${productName}')`
+    if(productName && retailCategory){
+      filterText=`&$filter=startswith(fields/Title,'${productName}') and fields/RetailCategory eq '${retailCategory}'`
+    }else
+    if (productName) {
+        filterText=`&$filter=startswith(fields/Title,'${productName}')`
+    }else
+    if (retailCategory) {
+      filterText=`&$filter=fields/RetailCategory eq '${retailCategory}'`
+    }
+    let products = await this.graphClient.api(`/sites/${siteId}/lists/Products/items?expand=fields&select=${listFields.join(",")}${filterText}`).get();
     const productItems: ProductItem[]= products.value.map((item) => {
       return {
         Id: item.id,

@@ -29,19 +29,19 @@ export const HandleMessagingExtensionQuery = async (context: TurnContext, query:
   const attachments = [];
   for (const obj of products) {
     const template = new AdaptiveCards.Template(viewProduct);
-    const imageUrl= await graphService.getPhotoFromSharePoint("Product Imagery",obj.PhotoSubmission);
+    const photo:any= await graphService.getPhotoFromSharePoint("Product Imagery",obj.PhotoSubmission);
     const card = template.expand({
       $root: {
         Product: obj,
         RetailCategories: categories,
         UserId:context.activity.from.id,
-        Imageurl:imageUrl
+        Imageurl:photo.medium.url
       },
     });
  
     const preview = CardFactory.heroCard(`<b>${obj.Title}</b>,
       of catgegory <br/> ${obj.RetailCategory}<br/> `,
-      [imageUrl],null,null);
+      [photo.small.url],null,null);
     const attachment = { ...CardFactory.adaptiveCard(card), preview };
     attachments.push(attachment);
   };

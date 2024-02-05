@@ -102,8 +102,8 @@ export class GraphService {
     const drive = await this.graphClient.api(`/sites/${siteId}/drives`).get();
     const driveId = drive.value.find((drive) => drive.name === nameOfDrive).id;  
     const fileName=getFileNameFromUrl(photoUrl);
-    const photo = await this.graphClient.api(`/sites/${siteId}/drives/${driveId}/root:/${fileName}:/thumbnails/0/small`).get();
-    return photo.url;    
+    const photo = await this.graphClient.api(`/sites/${siteId}/drives/${driveId}/root:/${fileName}:/thumbnails/0`).get();
+    return photo;    
   }
 
 

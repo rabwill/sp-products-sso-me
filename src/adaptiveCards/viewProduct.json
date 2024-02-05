@@ -29,9 +29,7 @@
                 "altText": "${Product.Title}"
               }
             ],
-            "minHeight": "350px",
-            "verticalContentAlignment": "Center",
-            "horizontalAlignment": "Center"
+            "verticalContentAlignment": "Center"       
           },
         {
             "type": "TextBlock",

@@ -47,3 +47,7 @@ export const setTaskInfo = (taskInfo) => {
         return result;
     }
 }
+export const getFileNameFromUrl=(url: string): string=>{
+    const urlParts = url.split("/");
+    return urlParts[urlParts.length - 1];
+  }

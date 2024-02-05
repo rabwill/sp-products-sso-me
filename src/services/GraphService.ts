@@ -1,6 +1,7 @@
 import { Client } from "@microsoft/microsoft-graph-client";
 import { ProductItem } from "../types/ProductItems";
 import config from "../config";
+import { getFileNameFromUrl } from "../util";
 const listFields = [
   "id",
   "fields/Title",
@@ -96,6 +97,17 @@ export class GraphService {
       ReleaseDate: product.fields.ReleaseDate
     };
   }
+  async getPhotoFromSharePoint(nameOfDrive, photoUrl): Promise<string> {
+    const siteId = await this.getSharePointStieId();
+    const drive = await this.graphClient.api(`/sites/${siteId}/drives`).get();
+    const driveId = drive.value.find((drive) => drive.name === nameOfDrive).id;  
+    const fileName=getFileNameFromUrl(photoUrl);
+    const photo = await this.graphClient.api(`/sites/${siteId}/drives/${driveId}/root:/${fileName}:/thumbnails/0/small`).get();
+    return photo.url;    
+  }
+
+
+
 
 
 

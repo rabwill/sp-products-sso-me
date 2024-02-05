@@ -21,6 +21,19 @@
             "style": "heading"
         },
         {
+            "type": "Container",
+            "items": [
+              {
+                "type": "Image",
+                "url": "${Imageurl}",
+                "altText": "${Product.Title}"
+              }
+            ],
+            "minHeight": "350px",
+            "verticalContentAlignment": "Center",
+            "horizontalAlignment": "Center"
+          },
+        {
             "type": "TextBlock",
             "text": "${Product.RetailCategory}",
             "wrap": true
@@ -57,7 +70,7 @@
                                         "value": "${Product.Title}",
                                         "isRequired": true,
                                         "errorMessage": "Title is required"
-                                    },
+                                    },                                    
                                     {
                                         "type": "Input.ChoiceSet",
                                         "label": "Category",
